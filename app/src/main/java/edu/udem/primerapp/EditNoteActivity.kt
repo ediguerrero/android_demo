@@ -3,10 +3,14 @@ package edu.udem.primerapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.DatePicker
 import android.widget.EditText
 import android.widget.Switch
+import android.widget.Toast
+import java.util.*
 
 class EditNoteActivity : AppCompatActivity() {
 
@@ -27,6 +31,9 @@ class EditNoteActivity : AppCompatActivity() {
         if(noteId!=-1){
             note = notesDao.getNote(noteId)
             findViewById<EditText>(R.id.edit_message).setText(note!!.title)
+
+            findViewById<Switch>(R.id.switch1).isChecked = note.reminder!!
+
         }
 
     }
@@ -47,6 +54,18 @@ class EditNoteActivity : AppCompatActivity() {
         if (item.itemId == android.R.id.home){
             finish()
         }
+        else if(item.itemId ==R.id.delete ){
+            notesDao.delete(note)
+            finish()
+        }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        if(this::note.isInitialized){
+            menuInflater.inflate(R.menu.menu_edit,menu)
+        }
+
+        return true
     }
 }

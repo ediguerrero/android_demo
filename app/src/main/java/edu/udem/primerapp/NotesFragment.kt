@@ -1,5 +1,6 @@
 package edu.udem.primerapp
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -45,15 +46,18 @@ class NotesFragment : Fragment() , OnNoteSelected{
 
     fun showNotes() {
         val notes = notesDao?.getNotes()
-        if (notes != null) {
-            adapter.setNotes(notes)
+        val notesNotReminder = notes.filter {!it.reminder!! }
+        if (notes != null && notesNotReminder !=null) {
+            adapter.setNotes(notesNotReminder)
         }
     }
 
     override fun onNoteSelected(id: Int) {
         //se va a ejecutar cuando se le de click a una nota
 
-
+        val intent = Intent(context, EditNoteActivity::class.java)
+        intent.putExtra("id", id)
+        startActivity(intent)
     }
 
 }
